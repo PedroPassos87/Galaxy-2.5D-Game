@@ -12,6 +12,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]private float _fireRate;
     private float _canFire = -1f;
     
+    [Header("Player stats")]
+    [SerializeField]private int _lives;
+    
+    
     void Start()
     {
         //take the current position = new position (0, 0, 0)
@@ -27,6 +31,16 @@ public class PlayerController : MonoBehaviour
           FireLaser(); 
         }
         
+    }
+
+    public void Damage()
+    {
+        _lives --;
+
+        if (_lives < 1)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     //spawn laser

@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class LaserController : MonoBehaviour
 {
-    [SerializeField] private float _spedd;
+    [SerializeField] private float _speed;
     
 
     void Update()
     {
         //laser up
-        transform.Translate(Vector3.up * Time.deltaTime * _spedd);
+        transform.Translate(Vector3.up * Time.deltaTime * _speed);
         
         //destroy the object
-        if (transform.position.y >= 8f)
+        if (transform.position.y > 8f)
         {
             Destroy(gameObject);
         }
