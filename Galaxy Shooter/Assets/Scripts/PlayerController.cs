@@ -15,11 +15,20 @@ public class PlayerController : MonoBehaviour
     [Header("Player stats")]
     [SerializeField]private int _lives;
     
+    private SpawnManager _spawnManager;
     
     void Start()
     {
         //take the current position = new position (0, 0, 0)
         transform.position = new Vector3(0, 0, 0);
+
+        _spawnManager =
+            GameObject.Find("SpawnManager").GetComponent<SpawnManager>(); //find the object and get component
+
+        if (_spawnManager == null)
+        {
+            Debug.LogError("No SpawnManager found");
+        }
     }
 
     void Update()
@@ -40,6 +49,7 @@ public class PlayerController : MonoBehaviour
         if (_lives < 1)
         {
             Destroy(this.gameObject);
+            _spawnManager.OnPlayerDeath();
         }
     }
 
