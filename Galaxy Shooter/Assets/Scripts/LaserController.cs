@@ -6,7 +6,6 @@ public class LaserController : MonoBehaviour
 {
     [SerializeField] private float _speed;
     
-
     void Update()
     {
         //laser up
@@ -15,7 +14,17 @@ public class LaserController : MonoBehaviour
         //destroy the object
         if (transform.position.y > 8f)
         {
-            Destroy(gameObject);
+            //check if this object has a parent
+            if (transform.parent != null)
+            {
+                //destroy the parent to
+                Destroy(transform.parent.gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+            
         }
     }
     

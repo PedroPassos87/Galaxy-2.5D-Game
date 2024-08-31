@@ -5,11 +5,6 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField]private float _speed;
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         //move down

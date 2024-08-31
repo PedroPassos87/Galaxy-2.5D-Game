@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    [Header("Enemy Spawn Settings")]
     [SerializeField]private GameObject _enemyPrefab;
-    [SerializeField] private float _timeToSpawn;
     [SerializeField]private GameObject _enemyContainer;
-    private bool _stopSpawning = false;
+    [SerializeField] private float _timeToSpawn;
+    
+    [Header("PowerUps Spawn Settings")]
+    [SerializeField]private GameObject _tripleShotPowerupPrefab;
 
+    private bool _stopSpawning = false;
     void Start()
     {
-        StartCoroutine(SpawnRoutine());
+        StartCoroutine(SpawnEnemyRoutine());
+        StartCoroutine(SpawnPowerupRoutine());
     }
 
     
-    IEnumerator SpawnRoutine()
+    IEnumerator SpawnEnemyRoutine()
     {
         //infinite loop
         while (_stopSpawning == false)
@@ -30,8 +35,18 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    IEnumerator SpawnPowerupRoutine()
+    {
+        while (_stopSpawning == false)
+        {
+            Vector3 postToSpawn = new Vector3(Random.Range(-8f,8f),7,0);
+            Instantiate(_tripleShotPowerupPrefab, postToSpawn, Quaternion.identity);
+            yield return new WaitForSeconds(Random.Range(3, 8));
+        }
+    }
+
     public void OnPlayerDeath()
     {
-        _stopSpawning = true;
+        _stopSpawning = true; 
     }
 }
