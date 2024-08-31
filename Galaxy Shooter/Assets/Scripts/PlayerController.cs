@@ -11,11 +11,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]private GameObject _laserPrefab;
     [SerializeField]private float _fireRate;
     [SerializeField]private GameObject _tripleShotPrefab;
+    [SerializeField]private GameObject _speedBoostPrefab;
     
     [Header("Player stats")]
     [SerializeField]private int _lives;
     private float _canFire = -1f;
     private bool _isTripleShotActive = false;
+    private bool _isSpeedBoostActive = false;
+    private int _speedMultiplier = 2;
     
     private SpawnManager _spawnManager;
     
@@ -44,6 +47,19 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    public void SpeedBoostActive()
+    {
+        _isSpeedBoostActive = true;
+        _speed *= _speedMultiplier;
+        StartCoroutine(SpeedBoostPowerDownRoutine());
+    }
+
+    IEnumerator SpeedBoostPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(3.0f);
+        _isSpeedBoostActive = false;
+        _speed /= _speedMultiplier;
+    }
     public void TripleShotActivate()
     {
         //tripleshot becomes true
@@ -94,8 +110,8 @@ public class PlayerController : MonoBehaviour
         
         //mais otimizado
         Vector3 direction = new Vector3(horizontalInput,verticalInput,  0);
-        transform.Translate(direction * _speed * Time.deltaTime);
-       
+        transform.Translate(direction * _speed* Time.deltaTime);
+        
         //mais eficaz
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y,-3.77f,0), 0);
        

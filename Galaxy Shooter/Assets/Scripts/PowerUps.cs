@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class PowerUps : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    
+    //ID for powerups
+    [SerializeField]private int _powerupID; //0 = triple shot  1 = speed 2 = shield
     void Update()
     {
         //move down
@@ -30,7 +33,21 @@ public class PowerUps : MonoBehaviour
             PlayerController player = other.transform.GetComponent<PlayerController>();
             if (player != null)
             {
-                player.TripleShotActivate();
+                switch (_powerupID)
+                {
+                    case 0:
+                        player.TripleShotActivate();
+                        break;
+                    case 1:
+                        player.SpeedBoostActive();
+                        break;
+                    case 2:
+                        //player.ShieldActivate();
+                        break;
+                    default:
+                        Console.WriteLine("default value");
+                        break;
+                }
             }
             Destroy(this.gameObject);
         }
