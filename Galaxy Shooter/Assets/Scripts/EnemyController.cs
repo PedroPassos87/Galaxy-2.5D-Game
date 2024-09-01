@@ -1,10 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyController : MonoBehaviour
 {
     [SerializeField]private float _speed;
+    private PlayerController _player;  //handle
+
+    private void Start()
+    {
+        _player = GameObject.Find("Player").GetComponent<PlayerController>();
+    }
+
     void Update()
     {
         //move down
@@ -35,6 +44,11 @@ public class EnemyController : MonoBehaviour
         if (other.CompareTag("Laser"))  //inimigo tomou o laser
         {
             Destroy(other.gameObject);   //destroi o inimigo
+            
+            if (_player != null)
+            {
+                _player.AddScore(5);
+            }
             Destroy(this.gameObject);    //destroi o laser
         }
     }

@@ -17,25 +17,34 @@ public class PlayerController : MonoBehaviour
     
     [Header("Player stats")]
     [SerializeField]private int _lives;
+    private int _score;
     
     [Header("Variable references")]
     [SerializeField]private GameObject _laserPrefab;
     [SerializeField]private GameObject _tripleShotPrefab;
     [SerializeField]private GameObject _shieldVisualizer;
     private SpawnManager _spawnManager;
+    private UIManager _uiManager;
     
     void Start()
     {
         //take the current position = new position (0, 0, 0)
         transform.position = new Vector3(0, 0, 0);
 
-        _spawnManager =
-            GameObject.Find("SpawnManager").GetComponent<SpawnManager>(); //find the object and get component
+        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>(); //find the object and get component
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();   
 
         if (_spawnManager == null)
         {
             Debug.LogError("No SpawnManager found");
         }
+
+        if (_uiManager == null)
+        {
+            Debug.LogError("No UIManager found");
+
+        }
+        
     }
 
     void Update()
@@ -48,7 +57,12 @@ public class PlayerController : MonoBehaviour
         }
         
     }
-    
+
+    public void AddScore(int points)
+    {
+        _score += points;
+        _uiManager.UpdateScore(_score);
+    }
     public void ShieldActive()
     {
         _isShieldActive = true;
