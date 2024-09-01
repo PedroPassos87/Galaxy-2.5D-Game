@@ -8,18 +8,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField]private float _speed;
 
     [Header("Skills")]
-    [SerializeField]private GameObject _laserPrefab;
     [SerializeField]private float _fireRate;
-    [SerializeField]private GameObject _tripleShotPrefab;
-    [SerializeField]private GameObject _speedBoostPrefab;
-    
-    [Header("Player stats")]
-    [SerializeField]private int _lives;
     private float _canFire = -1f;
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
     private int _speedMultiplier = 2;
+    private bool _isShieldActive = false;
     
+    [Header("Player stats")]
+    [SerializeField]private int _lives;
+    
+    [Header("Variable references")]
+    [SerializeField]private GameObject _laserPrefab;
+    [SerializeField]private GameObject _tripleShotPrefab;
+    [SerializeField]private GameObject _shieldVisualizer;
     private SpawnManager _spawnManager;
     
     void Start()
@@ -46,6 +48,22 @@ public class PlayerController : MonoBehaviour
         }
         
     }
+    
+    public void ShieldActive()
+    {
+        _isShieldActive = true;
+        _shieldVisualizer.SetActive(true);
+        StartCoroutine(ShieldPowerDownRoutine());
+    }
+    
+    IEnumerator ShieldPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(7.0f);
+        _isShieldActive = false;
+        _shieldVisualizer.SetActive(false);
+
+    }
+    
 
     public void SpeedBoostActive()
     {
@@ -60,7 +78,7 @@ public class PlayerController : MonoBehaviour
         _isSpeedBoostActive = false;
         _speed /= _speedMultiplier;
     }
-    public void TripleShotActivate()
+    public void TripleShotActive()
     {
         //tripleshot becomes true
         _isTripleShotActive = true;
@@ -75,6 +93,12 @@ public class PlayerController : MonoBehaviour
     }
     public void Damage()
     {
+        if (_isShieldActive)
+        {
+            _isShieldActive = false;
+            _shieldVisualizer.SetActive(false);
+            return;
+        }
         _lives --;
 
         if (_lives < 1)
