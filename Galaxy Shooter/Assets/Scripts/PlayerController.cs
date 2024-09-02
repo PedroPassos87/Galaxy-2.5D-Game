@@ -113,8 +113,10 @@ public class PlayerController : MonoBehaviour
             _shieldVisualizer.SetActive(false);
             return;
         }
-        _lives --;
-
+        _lives--; //diminui vida
+        
+        _uiManager.UpdateLives(_lives);  //update da ui
+        
         if (_lives < 1)
         {
             Destroy(this.gameObject);
@@ -136,7 +138,7 @@ public class PlayerController : MonoBehaviour
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0,0.95f,0), Quaternion.identity);    
         }
-            
+          
         
     }
 
