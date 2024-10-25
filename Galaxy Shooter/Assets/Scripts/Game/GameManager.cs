@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Verificações")]
     [SerializeField] private bool _isGameOver;
 
     private void Update()

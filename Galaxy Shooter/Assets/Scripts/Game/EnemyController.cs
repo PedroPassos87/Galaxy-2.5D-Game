@@ -6,12 +6,17 @@ using Random = UnityEngine.Random;
 
 public class EnemyController : MonoBehaviour
 {
+    [Header("Enemy stats")]
     [SerializeField]private float _speed;
-    private PlayerController _player;  //handle
 
+    [Header("Variable references")]
+    private PlayerController _player;  //handle
+    private Animation _anim;
+    
     private void Start()
     {
         _player = GameObject.Find("Player").GetComponent<PlayerController>();
+        _anim = GetComponent<Animation>();
     }
 
     void Update()

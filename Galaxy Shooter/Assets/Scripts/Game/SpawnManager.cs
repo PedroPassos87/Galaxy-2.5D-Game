@@ -7,14 +7,26 @@ public class SpawnManager : MonoBehaviour
     [Header("Enemy Spawn Settings")]
     [SerializeField]private GameObject _enemyPrefab;
     [SerializeField]private GameObject _enemyContainer;
-    [SerializeField] private float _timeToSpawn;
     
+    [SerializeField] private float _baseSpawnRate; // Spawn rate inicial em segundos
+    [SerializeField] private int _enemiesPerSpawn; // Quantos inimigos spawnam a cada ciclo
+
+    public void Construct(GameObject enemyPrefab, float baseSpawnRate, int enemiesPerSpawn)
+    {
+        _enemyPrefab = enemyPrefab;
+        _baseSpawnRate = baseSpawnRate;
+        _enemiesPerSpawn = enemiesPerSpawn;
+    }
+
     [Header("PowerUps Spawn Settings")]
     [SerializeField]private GameObject [] _powerupPrefabs;
-
     private bool _stopSpawning = false;
+    
+    private float _currentSpawnRate;
+    
     void Start()
     {
+        _currentSpawnRate = _baseSpawnRate;
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
     }
@@ -22,16 +34,19 @@ public class SpawnManager : MonoBehaviour
     
     IEnumerator SpawnEnemyRoutine()
     {
+        //aplicar verificacao de score
+        
         //infinite loop
         while (_stopSpawning == false)
         {
-            //definindo posiçao em que o inimigo spawna (entre -8 e 8 em x, 7 em y)
-            Vector3 spawnPos = new Vector3(Random.Range(-8f,8f),7,0);
-            //instanciando inimigo prefab
-            GameObject newEnemy = Instantiate(_enemyPrefab, spawnPos, Quaternion.identity);
-            newEnemy.transform.parent = _enemyContainer.transform;
-            //yield wait 5 seconds
-            yield return new WaitForSeconds(_timeToSpawn);
+            for (int i = 0; i < _enemiesPerSpawn; i++)
+            {
+                Vector3 spawnPos = new Vector3(Random.Range(-8f, 8f), 7, 0);
+                GameObject newEnemy = Instantiate(_enemyPrefab, spawnPos, Quaternion.identity);
+                newEnemy.transform.parent = _enemyContainer.transform;
+            }
+            //yield return new WaitForSeconds(_timeToSpawn);
+            yield return new WaitForSeconds(_currentSpawnRate);
         }
     }
 
