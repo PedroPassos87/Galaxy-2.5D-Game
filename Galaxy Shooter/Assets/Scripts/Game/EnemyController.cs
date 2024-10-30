@@ -15,7 +15,12 @@ public class EnemyController : MonoBehaviour
     
     private void Start()
     {
-        _player = GameObject.Find("Player").GetComponent<PlayerController>();
+        
+        GameObject playerObject = GameObject.Find("Player");
+        if (playerObject != null)
+        {
+            _player = playerObject.GetComponent<PlayerController>();
+        }
         _anim = GetComponent<Animation>();
     }
 
@@ -56,5 +61,10 @@ public class EnemyController : MonoBehaviour
             }
             Destroy(this.gameObject);    //destroi o laser
         }
+    }
+
+    public void SetEnemySpeed(float speed)
+    {
+        _speed = speed;
     }
 }

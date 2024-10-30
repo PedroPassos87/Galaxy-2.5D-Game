@@ -6,12 +6,21 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField]private float _speed;
+    [SerializeField]
+    public float _speed;
 
     [Header("Skills")]
     [SerializeField]private float _fireRate;
     private float _canFire = -1f;
     private bool _isTripleShotActive = false;
+
+
+    public bool IsTripleShotActive
+    {
+        get => _isTripleShotActive;
+        set => _isTripleShotActive = value;
+    }
+
     private bool _isSpeedBoostActive = false;
     private int _speedMultiplier = 2;
     private bool _isShieldActive = false;
@@ -166,6 +175,17 @@ public class PlayerController : MonoBehaviour
             transform.position = new Vector3(-11.4f, transform.position.y, 0);
         }
     }
+
+    public int GetScore()
+    {
+        return _score;
+    }
+    
+    public void SetLives(int lives)
+    {
+        _lives = lives;
+    }
+
 }
 
 

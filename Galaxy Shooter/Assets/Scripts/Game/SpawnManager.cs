@@ -1,41 +1,67 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SpawnManager : MonoBehaviour
 {
     [Header("Enemy Spawn Settings")]
-    [SerializeField]private GameObject _enemyPrefab;
-    [SerializeField]private GameObject _enemyContainer;
-    
+    [SerializeField]public GameObject _enemyPrefab;
+    [SerializeField]public GameObject _enemyContainer;
     [SerializeField] private float _baseSpawnRate; // Spawn rate inicial em segundos
-    [SerializeField] private int _enemiesPerSpawn; // Quantos inimigos spawnam a cada ciclo
+    private int _enemiesPerSpawn = 1; // Quantos inimigos spawnam a cada ciclo
+    private EnemyController _enemy; 
 
-    public void Construct(GameObject enemyPrefab, float baseSpawnRate, int enemiesPerSpawn)
+
+    public void Construct(GameObject enemyPrefab, GameObject enemyContainer, float baseSpawnRate, int enemiesPerSpawn)
     {
         _enemyPrefab = enemyPrefab;
+        _enemyContainer = enemyContainer;
         _baseSpawnRate = baseSpawnRate;
         _enemiesPerSpawn = enemiesPerSpawn;
     }
 
+    
     [Header("PowerUps Spawn Settings")]
     [SerializeField]private GameObject [] _powerupPrefabs;
     private bool _stopSpawning = false;
-    
     private float _currentSpawnRate;
+
+    [Header("Player stats")] 
+    private PlayerController _player; 
     
     void Start()
     {
+        if (_player != null)
+        {
+            _player = GameObject.Find("Player").GetComponent<PlayerController>();
+        }
+        
+        if (_enemy != null)
+        {
+            _enemy = GameObject.Find("Enemy").GetComponent<EnemyController>();
+        }
+        
+        if (_enemyPrefab == null || _enemyContainer == null)
+        {
+            Debug.LogError("Prefab ou container do inimigo não está atribuído.");
+            return;
+        }
+        
         _currentSpawnRate = _baseSpawnRate;
-        StartCoroutine(SpawnEnemyRoutine());
-        StartCoroutine(SpawnPowerupRoutine());
+        //StartCoroutine(SpawnPowerupRoutine());
+        SpawnEnemies();
     }
 
-    
+
+    public void SpawnEnemies()
+    {
+        StartCoroutine(SpawnEnemyRoutine());
+
+    }
     IEnumerator SpawnEnemyRoutine()
     {
-        //aplicar verificacao de score
-        
         //infinite loop
         while (_stopSpawning == false)
         {
@@ -45,6 +71,18 @@ public class SpawnManager : MonoBehaviour
                 GameObject newEnemy = Instantiate(_enemyPrefab, spawnPos, Quaternion.identity);
                 newEnemy.transform.parent = _enemyContainer.transform;
             }
+            
+            if (_player.GetScore() >= 20)
+            {
+                _enemiesPerSpawn = 2;
+            }
+            else if(_player.GetScore() >= 50)
+            {
+                _enemiesPerSpawn = 4;
+               _enemy.SetEnemySpeed(6);
+                
+            }
+            
             //yield return new WaitForSeconds(_timeToSpawn);
             yield return new WaitForSeconds(_currentSpawnRate);
         }
