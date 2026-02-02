@@ -9,8 +9,8 @@ public class SpawnManager : MonoBehaviour
     [Header("Enemy Spawn Settings")]
     [SerializeField]public GameObject _enemyPrefab;
     [SerializeField]public GameObject _enemyContainer;
-    [SerializeField] private float _baseSpawnRate; // Spawn rate inicial em segundos
-    private int _enemiesPerSpawn = 1; // Quantos inimigos spawnam a cada ciclo
+    [SerializeField] private float _baseSpawnRate; 
+    private int _enemiesPerSpawn = 2; 
     private EnemyController _enemy; 
 
 
@@ -33,12 +33,12 @@ public class SpawnManager : MonoBehaviour
     
     void Start()
     {
-        if (_player != null)
+        if (_player == null)
         {
             _player = GameObject.Find("Player").GetComponent<PlayerController>();
         }
         
-        if (_enemy != null)
+        if (_enemy == null)
         {
             _enemy = GameObject.Find("Enemy").GetComponent<EnemyController>();
         }
@@ -72,15 +72,14 @@ public class SpawnManager : MonoBehaviour
                 newEnemy.transform.parent = _enemyContainer.transform;
             }
             
-            if (_player.GetScore() >= 20)
-            {
-                _enemiesPerSpawn = 2;
-            }
-            else if(_player.GetScore() >= 50)
+            if (_player.GetScore() >= 50)
             {
                 _enemiesPerSpawn = 4;
-               _enemy.SetEnemySpeed(6);
-                
+                _enemy.SetEnemySpeed(6);
+            }
+            else if (_player.GetScore() >= 20)
+            {
+                _enemiesPerSpawn = 2;
             }
             
             //yield return new WaitForSeconds(_timeToSpawn);

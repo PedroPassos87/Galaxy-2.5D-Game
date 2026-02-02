@@ -6,12 +6,16 @@ using Random = UnityEngine.Random;
 
 public class EnemyController : MonoBehaviour
 {
+    
+    public static Action OnEnemyKilled;
+    
     [Header("Enemy stats")]
     [SerializeField]private float _speed;
 
     [Header("Variable references")]
     private PlayerController _player;  //handle
     private Animation _anim;
+    
     
     private void Start()
     {
@@ -48,7 +52,7 @@ public class EnemyController : MonoBehaviour
                 player.Damage(); //tira um de vida
             }
             
-            Destroy(this.gameObject);  //destroi inimigo
+            Die();
         }
 
         if (other.CompareTag("Laser"))  //inimigo tomou o laser
@@ -61,6 +65,12 @@ public class EnemyController : MonoBehaviour
             }
             Destroy(this.gameObject);    //destroi o laser
         }
+    }
+
+    private void Die()
+    {
+        OnEnemyKilled?.Invoke();
+        Destroy(gameObject);
     }
 
     public void SetEnemySpeed(float speed)
